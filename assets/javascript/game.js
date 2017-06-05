@@ -1,7 +1,7 @@
 
 document.getElementById('instructions').innerHTML = 'Press ESC key to begin/restart!';
 
-var hangmanWords = ['motorcycle', 'parkway', 'bootcamp', 'algorithms', 'pizza', 'methods'];
+var hangmanWords = ['blender', 'oven', 'stove', 'refrigerator', 'microwave', 'table', 'utensils', 'dishwasher', 'sink'];
 
 var word = '';
 var wrongChar = [];
@@ -9,6 +9,7 @@ var rightChar = [];
 var rightCharIndex = [];
 var triesLeft = 0;
 var playing = false;
+var wins = 0;
 
 function reset() {
     word = hangmanWords[Math.floor(Math.random()*hangmanWords.length)];
@@ -67,14 +68,17 @@ function printWord (wordIndex, currentWord) {
     return stringResult;
 }
 
-document.onkeyup = function(event) {
-    keyPressed = event.key.toLowerCase();
+//document.onkeyup = function(event) {
+    //keyPressed = event.key.toLowerCase();
+function keyPressHandler(inputEvent) {
+    keyPressed = inputEvent;
 
     if (keyPressed == 'escape') {
         reset();
         alert('Game Reset!');
     } else {
         if (!playing) {
+            alert('Key inputs are locked when not playing. Press ESC to begin or restart.');
             return;
         } else {
             if (rightChar.indexOf(keyPressed) > -1 || wrongChar.indexOf(keyPressed) > -1) {
@@ -90,15 +94,18 @@ document.onkeyup = function(event) {
         }
     }
 
-    document.getElementById('keystroke').innerHTML = 'Key pressed: ' + keyPressed;
+    //document.getElementById('keystroke').innerHTML = 'Key pressed: ' + keyPressed;
     //document.getElementById('word').innerHTML = 'Word is: ' + word;
     document.getElementById('attemptsRemaining').innerHTML = 'Attempts Remaining: ' + triesLeft;
     document.getElementById('correctGuessed').innerHTML = 'Correct: ' + printGuessed(rightChar);
     //document.getElementById('correctIndex').innerHTML = 'Index: ' + printGuessed(rightCharIndex);
     document.getElementById('wrongGuessed').innerHTML = 'Wrong: ' + printGuessed(wrongChar);
     document.getElementById('wordProgress').innerHTML = 'Progress: ' + printWord(rightCharIndex, word);
+    document.getElementById('wins').innerHTML = 'Wins: ' + wins;
     if (rightCharIndex.length === word.length) {
         document.getElementById('message').innerHTML = 'You Win!';
+        wins++;
+        document.getElementById('wins').innerHTML = 'Wins: ' + wins;
         playing = false;
         return;
     }
@@ -109,4 +116,9 @@ document.onkeyup = function(event) {
     } else {
         document.getElementById('message').innerHTML = 'Press letter keys to continue guesing!';
     }
+}
+
+document.onkeyup = function(event) {
+    keyInput = event.key.toLowerCase();
+    keyPressHandler(keyInput);
 }
