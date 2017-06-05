@@ -134,9 +134,11 @@ function keyPressHandler(inputEvent) {
 function manualToggle() {
     if (manual) {
         document.getElementById('manualToggle').innerHTML = 'Auto';
+        document.getElementById('instructions').innerHTML = 'Press any key to get started!';
         manual = false;
     } else {
         document.getElementById('manualToggle').innerHTML = 'Manual';
+        document.getElementById('instructions').innerHTML = 'Press ESC key to get started!';
         manual = true;
     }
 }
