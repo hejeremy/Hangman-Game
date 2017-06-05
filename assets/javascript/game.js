@@ -11,7 +11,7 @@ var triesLeft = 0;
 var playing = false;
 var wins = 0;
 var manual = false;
-document.getElementById('manualToggle').innerHTML = 'Restart Auto';
+document.getElementById('manualToggle').innerHTML = 'Auto';
 
 function reset() {
     word = hangmanWords[Math.floor(Math.random()*hangmanWords.length)];
@@ -28,7 +28,10 @@ function isLetter(charIn) {
 }
 
 function checkChar(currentLetter, currentWord, wrongList, rightList, rightListIndex) {
+    var sound = '';
     if (currentWord.indexOf(currentLetter) > -1) {
+        sound = document.getElementById("audioRight");
+        sound.play();
         for (var i=0; i<currentWord.length; i++) {
             if (currentLetter === currentWord.charAt(i)) {
                 if (rightList.indexOf(currentLetter) > -1) {
@@ -41,6 +44,8 @@ function checkChar(currentLetter, currentWord, wrongList, rightList, rightListIn
         }
     } else {
         wrongList.push(currentLetter);
+        sound = document.getElementById("audioWrong");
+        sound.play();
         updateAttempts();
     }
 }
@@ -105,19 +110,21 @@ function keyPressHandler(inputEvent) {
     document.getElementById('attemptsRemaining').innerHTML = 'Attempts Remaining: ' + triesLeft;
     document.getElementById('correctGuessed').innerHTML = 'Correct: ' + printGuessed(rightChar);
     //document.getElementById('correctIndex').innerHTML = 'Index: ' + printGuessed(rightCharIndex);
-    document.getElementById('wrongGuessed').innerHTML = 'Wrong: ' + printGuessed(wrongChar);
+    document.getElementById('wrongGuessed').innerHTML = 'Misses: ' + printGuessed(wrongChar);
     document.getElementById('wordProgress').innerHTML = 'Progress: ' + printWord(rightCharIndex, word);
     document.getElementById('wins').innerHTML = 'Wins: ' + wins;
     if (rightCharIndex.length === word.length) {
         document.getElementById('message').innerHTML = 'You Win!';
         wins++;
         document.getElementById('wins').innerHTML = 'Wins: ' + wins;
+        document.getElementById("audioWin").play();
         playing = false;
         return;
     }
     if (triesLeft === 0) {
         document.getElementById('message').innerHTML = 'You Lose! Answer: "' + word + '"';
         playing = false;
+        document.getElementById("audioLose").play();
         return;
     } else {
         document.getElementById('message').innerHTML = 'Press letter keys to continue guesing!';
@@ -126,10 +133,10 @@ function keyPressHandler(inputEvent) {
 
 function manualToggle() {
     if (manual) {
-        document.getElementById('manualToggle').innerHTML = 'Restart Auto';
+        document.getElementById('manualToggle').innerHTML = 'Auto';
         manual = false;
     } else {
-        document.getElementById('manualToggle').innerHTML = 'Restart Manual';
+        document.getElementById('manualToggle').innerHTML = 'Manual';
         manual = true;
     }
 }
