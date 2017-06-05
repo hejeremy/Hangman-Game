@@ -1,5 +1,5 @@
 
-document.getElementById('instructions').innerHTML = 'Press ESC key to begin/restart!';
+document.getElementById('instructions').innerHTML = 'Press any key to get started!';
 
 var hangmanWords = ['blender', 'oven', 'stove', 'refrigerator', 'microwave', 'table', 'utensils', 'dishwasher', 'sink'];
 
@@ -10,6 +10,8 @@ var rightCharIndex = [];
 var triesLeft = 0;
 var playing = false;
 var wins = 0;
+var manual = false;
+document.getElementById('manualToggle').innerHTML = 'Restart Auto';
 
 function reset() {
     word = hangmanWords[Math.floor(Math.random()*hangmanWords.length)];
@@ -50,7 +52,7 @@ function updateAttempts() {
 function printGuessed (arrayIn) {
     var stringResult = '';
     for (var i=0; i<arrayIn.length; i++) {
-        stringResult += arrayIn[i];
+        stringResult += arrayIn[i].toUpperCase();
         stringResult += ' ';
     }
     return stringResult;
@@ -60,26 +62,30 @@ function printWord (wordIndex, currentWord) {
     var stringResult = '';
     for (var i=0; i<currentWord.length; i++) {
         if (wordIndex.indexOf(i) > -1) {
-            stringResult += currentWord.charAt(i);
+            stringResult += currentWord.charAt(i).toUpperCase() + ' ';
         } else {
-            stringResult += '-';
+            stringResult += '_ ';
         }
     }
     return stringResult;
 }
 
 //document.onkeyup = function(event) {
-    //keyPressed = event.key.toLowerCase();
+//keyPressed = event.key.toLowerCase();
 function keyPressHandler(inputEvent) {
     keyPressed = inputEvent;
 
     if (keyPressed == 'escape') {
         reset();
-        alert('Game Reset!');
+        //alert('Game Reset!');
     } else {
         if (!playing) {
-            alert('Key inputs are locked when not playing. Press ESC to begin or restart.');
-            return;
+            if (manual) {
+                alert('Most key inputs are locked when playing on manuel. Press ESC to start or click to toggle the manual/auto button.');
+                return;
+            } else {
+                reset();
+            }
         } else {
             if (rightChar.indexOf(keyPressed) > -1 || wrongChar.indexOf(keyPressed) > -1) {
                 alert('You have already guessed that letter!');
@@ -115,6 +121,16 @@ function keyPressHandler(inputEvent) {
         return;
     } else {
         document.getElementById('message').innerHTML = 'Press letter keys to continue guesing!';
+    }
+}
+
+function manualToggle() {
+    if (manual) {
+        document.getElementById('manualToggle').innerHTML = 'Restart Auto';
+        manual = false;
+    } else {
+        document.getElementById('manualToggle').innerHTML = 'Restart Manual';
+        manual = true;
     }
 }
 

@@ -2,6 +2,6 @@ body {
     background-image: url('../images/kitchen.jpg');
 }
 
-p {
+p, button {
     font-size: 30px;
 }
